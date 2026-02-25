@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.css";
+import ReactDOM from "react-dom/client";
 import Weather from "./Weather";
 
 export default function App() {
@@ -7,6 +8,10 @@ export default function App() {
     <div className="App">
       <h1>Weather App</h1>
 
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(
+      <App />
+      );
       <footer>
         This project was coded by
         <a href="https://github.com/gisbcode" target="_blank" rel="noopener">
