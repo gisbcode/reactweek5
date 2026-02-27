@@ -1,28 +1,23 @@
 import React from "react";
-import "./index.css";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 import Weather from "./Weather";
 
-export default function App() {
+function App() {
   return (
     <div className="App">
       <h1>Weather App</h1>
-
-      const root = ReactDOM.createRoot(document.getElementById("root"));
-      root.render(
-      <App />
-      );
       <Weather />
       <footer>
         This project was coded by
-        <a href="https://github.com/gisbcode" target="_blank" rel="noopener">
+        <a href="https://github.com/gisbcode" target="_blank" rel="noreferrer">
           Giovanna Bellon
         </a>
         and is
         <a
           href="https://github.com/gisbcode/React-Weather-Forecast-Final-Project"
           target="_blank"
-          rel="noopener"
+          rel="noreferrer"
         >
           on GitHub
         </a>
@@ -30,7 +25,7 @@ export default function App() {
         <a
           href="https://weatherforecastreactfinal.netlify.app/"
           target="_blank"
-          rel="noopener"
+          rel="noreferrer"
         >
           Hosted on Netlify
         </a>
@@ -38,3 +33,6 @@ export default function App() {
     </div>
   );
 }
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);

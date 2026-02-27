@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Weather.css";
@@ -6,6 +5,7 @@ import ReactAnimatedWeather from "react-animated-weather";
 
 export default function Weather() {
   const [city, setCity] = useState("London");
+  const [submittedCity, setSubmittedCity] = useState("London");
   const [weather, setWeather] = useState(null);
 
   function handleResponse(response) {
@@ -19,20 +19,16 @@ export default function Weather() {
     });
   }
 
-  function search() {
+  useEffect(() => {
     const apiKey = "39a3014fd34afe90bc14c4tc7oed280d";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${submittedCity}&appid=${apiKey}&units=metric`;
 
     axios.get(apiUrl).then(handleResponse);
-  }
-
-  useEffect(() => {
-    search();
-  }, []);
+  }, [submittedCity]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    search();
+    setSubmittedCity(city);
   }
 
   function handleCityChange(event) {
@@ -96,4 +92,3 @@ export default function Weather() {
     </div>
   );
 }
-
