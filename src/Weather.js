@@ -21,7 +21,7 @@ export default function Weather() {
 
   useEffect(() => {
     const apiKey = "39a3014fd34afe90bc14c4tc7oed280d";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${submittedCity}&appid=${apiKey}&units=metric`;
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query={query}&key={key};
 
     axios.get(apiUrl).then(handleResponse);
   }, [submittedCity]);
