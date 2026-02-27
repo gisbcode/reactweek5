@@ -91,4 +91,4 @@ export default function Weather() {
       <p>Wind: {weather.wind} km/h</p>
     </div>
   );
-  }
+}
