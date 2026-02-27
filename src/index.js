@@ -12,6 +12,7 @@ export default function App() {
       root.render(
       <App />
       );
+      <Weather />
       <footer>
         This project was coded by
         <a href="https://github.com/gisbcode" target="_blank" rel="noopener">
