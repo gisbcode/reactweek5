@@ -1,26 +1,32 @@
-import React, { useState } from "react";
-import WeatherInfo from "./WeatherInfo";
-import WeatherForecast from "./WeatherForecast";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Weather.css";
+import ReactAnimatedWeather from "react-animated-weather";
 
-export default function Weather(props) {
-  const [weatherData, setWeatherData] = useState({ ready: false });
-  const [city, setCity] = useState(props.defaultCity);
+export default function Weather() {
+  const [city, setCity] = useState("London");
+  const [weather, setWeather] = useState(null);
 
   function handleResponse(response) {
-    setWeatherData({
-      ready: true,
-      coordinates: response.data.coord,
-      temperature: response.data.main.temp,
+    setWeather({
+      temperature: Math.round(response.data.main.temp),
       humidity: response.data.main.humidity,
-      date: new Date(response.data.dt * 1000),
       description: response.data.weather[0].description,
       icon: response.data.weather[0].icon,
-      wind: response.data.wind.speed,
+      wind: Math.round(response.data.wind.speed),
       city: response.data.name,
     });
   }
+
+  function search() {
+    const apiKey = "39a3014fd34afe90bc14c4tc7oed280d";
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${submittedCity}&key=${apiKey}`;
+
+    axios.get(apiUrl).then(handleResponse);
+  }
+
+  useEffect(() => {
+    search();
+  }, []);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -31,41 +37,60 @@ export default function Weather(props) {
     setCity(event.target.value);
   }
 
-  function search() {
-    const apiKey = "5f472b7acba333cd8a035ea85a0d4d4c";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
+  function mapIcon(iconCode) {
+    const iconMap = {
+      "01d": "CLEAR_DAY",
+      "01n": "CLEAR_NIGHT",
+      "02d": "PARTLY_CLOUDY_DAY",
+      "02n": "PARTLY_CLOUDY_NIGHT",
+      "03d": "CLOUDY",
+      "03n": "CLOUDY",
+      "04d": "CLOUDY",
+      "04n": "CLOUDY",
+      "09d": "RAIN",
+      "09n": "RAIN",
+      "10d": "RAIN",
+      "10n": "RAIN",
+      "11d": "SLEET",
+      "11n": "SLEET",
+      "13d": "SNOW",
+      "13n": "SNOW",
+      "50d": "FOG",
+      "50n": "FOG",
+    };
+
+    return iconMap[iconCode] || "CLEAR_DAY";
   }
 
-  if (weatherData.ready) {
-    return (
-      <div className="Weather">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-9">
-              <input
-                type="search"
-                placeholder="Enter a city.."
-                className="form-control"
-                autoFocus="on"
-                onChange={handleCityChange}
-              />
-            </div>
-            <div className="col-3">
-              <input
-                type="submit"
-                value="Search"
-                className="btn btn-primary w-100"
-              />
-            </div>
-          </div>
-        </form>
-        <WeatherInfo data={weatherData} />
-        <WeatherForecast coordinates={weatherData.coordinates} />
-      </div>
-    );
-  } else {
-    search();
+  if (!weather) {
     return "Loading...";
   }
+
+  return (
+    <div className="Weather">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="search"
+          value={city}
+          onChange={handleCityChange}
+          placeholder="Enter a city..."
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      <h1>{weather.city}</h1>
+
+      <ReactAnimatedWeather
+        icon={mapIcon(weather.icon)}
+        color="blue"
+        size={100}
+        animate={true}
+      />
+
+      <h2>{weather.temperature}°C</h2>
+      <p>{weather.description}</p>
+      <p>Humidity: {weather.humidity}%</p>
+      <p>Wind: {weather.wind} km/h</p>
+    </div>
+  );
 }
