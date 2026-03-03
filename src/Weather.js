@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Weather.css";
 import ReactAnimatedWeather from "react-animated-weather";
 
 export default function Weather() {
   const [city, setCity] = useState("London");
-  const [submittedCity, setSubmittedCity] = useState("London");
   const [weather, setWeather] = useState(null);
 
   function handleResponse(response) {
@@ -19,16 +17,20 @@ export default function Weather() {
     });
   }
 
-  useEffect(() => {
+  function search() {
     const apiKey = "39a3014fd34afe90bc14c4tc7oed280d";
-   const apiUrl = `https://api.shecodes.io/weather/v1/current?query={submittedCity}&key={apiKey}`;
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${submittedCity}&key=${apiKey}`;
 
     axios.get(apiUrl).then(handleResponse);
-  }, [submittedCity]);
+  }
+
+  useEffect(() => {
+    search();
+  }, []);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setSubmittedCity(city);
+    search();
   }
 
   function handleCityChange(event) {
